@@ -47,5 +47,27 @@ const personExtendedSample: PersonExtended1 = {
     birthPlace: "New York"
 };
 
+enum UserRole {
+    ADMIN = "admin",
+    USER = "user",
+    GUEST = "guest",
+    SUPER_ADMIN = "super_admin"
+}
 
+interface Client {
+    userName: string;
+    password: string;
+    role: UserRole;
+}
 
+const clientSample: Client = {
+    userName: "johndoe",
+    password: "securepassword",
+    role: UserRole.ADMIN
+};
+
+type MyFunction = (a: string, b: number) => string;
+
+const functionSample: MyFunction = (a, b) => {
+    return a + b;
+}
