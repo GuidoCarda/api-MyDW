@@ -22,7 +22,12 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPosts = async (req: Request, res: Response) => {
     try {
-        const posts = await Post.find().populate('user', 'username email');
+        const { title } = req.query;
+        let filter = {};
+        if (title) {
+            filter = { title: { $regex: title, $options: 'i' } };
+        }
+        const posts = await Post.find(filter).populate('user', 'username email');
         res.status(200).json(posts);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve posts' });
