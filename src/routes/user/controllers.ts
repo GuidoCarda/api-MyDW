@@ -1,14 +1,19 @@
 import { Request, Response } from 'express';
 import User from '../../models/User';
+import admin from '../../firebase';
 
 const createUser = async (req: Request, res: Response) => {
     try {
-        const { name, lastname, email } = req.body;
+        const { email, password, name, lastname } = req.body;
+        const userRecord = await admin.auth().createUser({
+            email,
+            password
+        });
 
-        const user = new User({ name, lastname, email, isActive: true });
+        const user = new User({ name, lastname, email, uid: userRecord.uid, isActive: true });
         await user.save();
 
-        res.status(201).json(user);
+        res.status(201).json({'Usuario creado': user, 'Registro de usuario': userRecord });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create user', details: error });
     }

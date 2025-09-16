@@ -1,7 +1,13 @@
+import { required } from "joi";
 import { InferSchemaType, model, Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
+    uid: {
+      type: String,
+      required: false,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
