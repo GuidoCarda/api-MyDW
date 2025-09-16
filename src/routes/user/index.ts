@@ -5,6 +5,7 @@ import controllers from "./controllers";
 const router = express.Router();
 
 router.post("/", controllers.createUser);
+router.post("/login", controllers.loginWithEmailPassword);
 router.get("/", controllers.getAllUsers);
 router.get("/:id", controllers.getUserById);
 router.patch("/:id", controllers.updateUser);

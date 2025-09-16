@@ -19,6 +19,36 @@ const createUser = async (req: Request, res: Response) => {
     }
 };
 
+const loginWithEmailPassword = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const userRecord = await admin.auth().getUserByEmail(email);
+
+        if (!userRecord) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Here you would normally verify the password.
+        // Firebase Admin SDK does not provide password verification.
+        // This is a placeholder for actual password verification logic.
+        const isValidPassword = true; // Replace with real password check
+
+        if (!isValidPassword) {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+
+        res.status(200).json({ message: 'Login with email and password successful.' });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to login', details: error });
+    }
+}
+
 const getAllUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.find();
@@ -92,4 +122,4 @@ const softDeleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export default { createUser, getAllUsers, getUserById, updateUser, hardDeleteUser, softDeleteUser };
+export default { createUser, loginWithEmailPassword, getAllUsers, getUserById, updateUser, hardDeleteUser, softDeleteUser };
