@@ -3,10 +3,9 @@ import { InferSchemaType, model, Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
-    uid: {
+    _id: {
       type: String,
-      required: false,
-      unique: true,
+      required: true,
     },
     name: {
       type: String,
@@ -39,7 +38,10 @@ const userSchema = new Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  {
+    _id: false,
+    timestamps: true,
+  }
 );
 
 type UserType = InferSchemaType<typeof userSchema>;

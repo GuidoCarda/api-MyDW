@@ -27,7 +27,7 @@ const petSchema = new Schema(
       required: true,
     },
     owner: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: "User",
       required: true,
     },

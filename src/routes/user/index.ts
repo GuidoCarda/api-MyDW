@@ -1,15 +1,14 @@
-import express from "express";
+import express, { Router } from "express";
 
 import controllers from "./controllers";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post("/", controllers.createUser);
 router.post("/login", controllers.loginWithEmailPassword);
 router.get("/", controllers.getAllUsers);
 router.get("/:id", controllers.getUserById);
 router.patch("/:id", controllers.updateUser);
-router.delete("/:id", controllers.hardDeleteUser);
-router.patch('/soft/:id', controllers.softDeleteUser);
+router.delete("/:id", controllers.softDeleteUser);
 
 export default router;
