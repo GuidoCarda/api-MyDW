@@ -21,6 +21,19 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    pets: {
+      type: [Schema.Types.ObjectId],
+      ref: "Pet",
+      required: false,
+    },
     isActive: {
       type: Boolean,
       default: true,

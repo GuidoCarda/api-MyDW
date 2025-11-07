@@ -1,11 +1,13 @@
-import express from 'express';
+import express, { Router } from "express";
 
-import User from './user';
-import Post from './post';
+import User from "./user";
+import Post from "./post";
+import Pet from "./pet";
 
-const router = express.Router();
+const router: Router = express.Router();
 
-router.use('/users', User);
-router.use('/posts', Post);
+router.use("/users", User);
+router.use("/posts", Post);
+router.use("/pets", Pet);
 
 export default router;

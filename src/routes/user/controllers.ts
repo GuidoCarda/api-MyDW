@@ -4,17 +4,26 @@ import admin from '../../firebase';
 
 const createUser = async (req: Request, res: Response) => {
     try {
-        const { email, password, name, lastname } = req.body;
+        const { email, password, name, lastname, phone, address } = req.body;
         const userRecord = await admin.auth().createUser({
             email,
             password
         });
 
-        const user = new User({ name, lastname, email, uid: userRecord.uid, isActive: true });
+        const user = new User({ 
+            name, 
+            lastname, 
+            email, 
+            phone, 
+            address, 
+            uid: userRecord.uid, 
+            isActive: true 
+        });
         await user.save();
 
         res.status(201).json({'Usuario creado': user, 'Registro de usuario': userRecord });
     } catch (error) {
+        console.log("Error creating user:", error);
         res.status(500).json({ error: 'Failed to create user', details: error });
     }
 };
