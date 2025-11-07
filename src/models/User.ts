@@ -9,11 +9,11 @@ const userSchema = new Schema(
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     lastname: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
@@ -22,11 +22,11 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       type: String,
-      required: true,
+      required: false,
     },
     pets: {
       type: [Schema.Types.ObjectId],
