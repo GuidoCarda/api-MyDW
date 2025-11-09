@@ -14,6 +14,7 @@ router.post(
   controllers.createPet
 );
 router.get("/", controllers.getAllPets);
+router.get("/owner/:ownerId", controllers.getPetsByOwner);
 router.get("/:id", controllers.getPetById);
 router.patch(
   "/:id",

@@ -96,6 +96,20 @@ const getPetById = async (req: Request, res: Response) => {
   }
 };
 
+const getPetsByOwner = async (req: Request, res: Response) => {
+  try {
+    const { ownerId } = req.params;
+    const pets = await Pet.find({ owner: ownerId, isActive: true }).populate(
+      "owner",
+      "name lastname email"
+    );
+
+    res.status(200).json(pets);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve pets by owner" });
+  }
+};
+
 const updatePet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -151,6 +165,7 @@ export default {
   createPet,
   getAllPets,
   getPetById,
+  getPetsByOwner,
   updatePet,
   softDeletePet,
 };
