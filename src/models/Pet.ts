@@ -47,6 +47,21 @@ const petSchema = new Schema(
       type: String,
       required: false,
     },
+    tagId: {
+      type: String,
+      unique: true,
+      sparse: true, // allows null but unique if it exists
+      index: true,
+      required: false,
+    },
+    tagActivatedAt: {
+      type: Date,
+      required: false,
+    },
+    isPublicProfile: {
+      type: Boolean,
+      default: false, // the owner decides if the profile is public
+    },
   },
   { timestamps: true }
 );

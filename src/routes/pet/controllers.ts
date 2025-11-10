@@ -68,7 +68,18 @@ const createPet = async (req: Request, res: Response) => {
 
 const getAllPets = async (req: Request, res: Response) => {
   try {
-    const pets = await Pet.find({ isActive: true }).populate(
+    // get ownerId from query string if exists
+    const { ownerId } = req.query;
+
+    // build the base filter
+    const filter: any = { isActive: true };
+
+    // if ownerId is provided, add it to the filter
+    if (ownerId) {
+      filter.owner = ownerId;
+    }
+
+    const pets = await Pet.find(filter).populate(
       "owner",
       "name lastname email"
     );

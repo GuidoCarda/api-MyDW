@@ -1,11 +1,22 @@
 import { Router } from "express";
 import authenticateFirebase from "../../middleware/authenticateFirebase";
-import controllers from "../tag/controllers";
+import optionalAuthenticateFirebase from "../../middleware/optionalAuthenticateFirebase";
+import controllers from "./controllers";
 
 const router: Router = Router();
 
+// public routes
 router.get("/verify/:tagId", controllers.verifyTag);
 
-router.post("/generate", controllers.generateTagBatch);
+// route with optional authentication (detects if the user is logged in)
+router.get(
+  "/info/:tagId",
+  optionalAuthenticateFirebase,
+  controllers.getTagInfo
+);
+
+// protected routes (require authentication)
+router.post("/generate", authenticateFirebase, controllers.generateTagBatch);
+router.post("/activate/:tagId", authenticateFirebase, controllers.activateTag);
 
 export default router;

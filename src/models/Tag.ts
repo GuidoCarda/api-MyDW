@@ -8,7 +8,7 @@ const tagSchema = new Schema(
       unique: true,
       index: true,
     },
-    isActive: {
+    isActivated: {
       type: Boolean,
       default: false,
     },
@@ -24,7 +24,7 @@ const tagSchema = new Schema(
     },
     activatedAt: {
       type: Date,
-      default: Date.now,
+      required: false,
     },
     batchNumber: {
       type: String,
@@ -32,7 +32,7 @@ const tagSchema = new Schema(
     },
     qrUrl: {
       type: String,
-      required: false,
+      required: true,
     },
   },
   { timestamps: true }
