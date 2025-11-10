@@ -6,7 +6,7 @@ import Pet from "../../models/Pet";
 export const generateTagBatch = async (req: Request, res: Response) => {
   try {
     const { quantity, batchNumber } = req.body;
-    const baseUrl = "http://192.168.100.2:5173";
+    const baseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
     const tags = [];
 
@@ -182,9 +182,20 @@ export const activateTag = async (req: Request, res: Response) => {
   }
 };
 
+// Obtener todos los tags (para admin/testing)
+export const getAllTags = async (req: Request, res: Response) => {
+  try {
+    const tags = await Tag.find().sort({ createdAt: -1 }); // Más recientes primero
+    res.json(tags);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   generateTagBatch,
   verifyTag,
   getTagInfo,
   activateTag,
+  getAllTags,
 };
