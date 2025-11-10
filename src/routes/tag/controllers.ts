@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { nanoid } from "nanoid";
 import Tag, { TagType } from "../../models/Tag";
 import Pet from "../../models/Pet";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const generateTagBatch = async (req: Request, res: Response) => {
   try {
