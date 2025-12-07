@@ -172,6 +172,54 @@ const softDeletePet = async (req: Request, res: Response) => {
   }
 };
 
+const toggleLostStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { isLost } = req.body;
+
+    if (typeof isLost !== "boolean") {
+      return res.status(400).json({
+        error: "Invalid request",
+        message: "isLost must be a boolean value",
+      });
+    }
+
+    const updateData: any = { isLost };
+
+    // Si se marca como perdida, guardar la fecha
+    if (isLost) {
+      updateData.lostAt = new Date();
+    } else {
+      // Si se desmarca como perdida, limpiar la fecha
+      updateData.lostAt = null;
+    }
+
+    const pet = await Pet.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!pet) {
+      return res.status(404).json({ error: "Pet not found" });
+    }
+
+    res.status(200).json(pet);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update pet lost status" });
+  }
+};
+
+const getLostPets = async (req: Request, res: Response) => {
+  try {
+    const lostPets = await Pet.find({ isLost: true, isActive: true }).populate(
+      "owner",
+      "name lastname email phone"
+    );
+    res.status(200).json(lostPets);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to get lost pets" });
+  }
+};
+
 export default {
   createPet,
   getAllPets,
@@ -179,4 +227,6 @@ export default {
   getPetsByOwner,
   updatePet,
   softDeletePet,
+  toggleLostStatus,
+  getLostPets,
 };

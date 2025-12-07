@@ -12,3 +12,5 @@ router.patch("/:id", controllers.updateUser);
 router.delete("/:id", controllers.softDeleteUser);
 
 export default router;
+
+

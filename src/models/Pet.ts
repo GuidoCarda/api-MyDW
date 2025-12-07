@@ -62,6 +62,14 @@ const petSchema = new Schema(
       type: Boolean,
       default: false, // the owner decides if the profile is public
     },
+    isLost: {
+      type: Boolean,
+      default: false,
+    },
+    lostAt: {
+      type: Date,
+      required: false,
+    },
   },
   { timestamps: true }
 );

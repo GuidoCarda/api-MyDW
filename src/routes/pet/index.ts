@@ -14,6 +14,7 @@ router.post(
   controllers.createPet
 );
 router.get("/", controllers.getAllPets);
+router.get("/lost", controllers.getLostPets);
 router.get("/owner/:ownerId", controllers.getPetsByOwner);
 router.get("/:id", controllers.getPetById);
 router.patch(
@@ -21,6 +22,7 @@ router.patch(
   validationMiddleware(updatePetValidationSchema),
   controllers.updatePet
 );
-router.patch("/:id", controllers.softDeletePet);
+router.patch("/:id/lost", controllers.toggleLostStatus);
+router.delete("/:id", controllers.softDeletePet);
 
 export default router;
