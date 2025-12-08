@@ -76,7 +76,7 @@ export const getTagInfo = async (req: Request, res: Response) => {
       return res.json({
         isActivated: false,
         tagId: tag.tagId,
-        canActivate: !!userId, // true if authenticated
+        canActivate: !!userId,
         needsLogin: !userId,
         message: userId
           ? "Esta chapita está disponible para ser activada"
@@ -84,7 +84,6 @@ export const getTagInfo = async (req: Request, res: Response) => {
       });
     }
 
-    // if is activated, get public profile
     const pet = await Pet.findById(tag.petId)
       .populate("owner", "name lastname email phone")
       .lean();
@@ -96,7 +95,6 @@ export const getTagInfo = async (req: Request, res: Response) => {
       });
     }
 
-    // type assertion for the populated owner
     const owner = pet.owner as any;
 
     const publicProfile = {
@@ -125,7 +123,6 @@ export const getTagInfo = async (req: Request, res: Response) => {
   }
 };
 
-// activate a tag (link to pet) - requires authentication
 export const activateTag = async (req: Request, res: Response) => {
   try {
     const { tagId } = req.params;
@@ -185,7 +182,6 @@ export const activateTag = async (req: Request, res: Response) => {
   }
 };
 
-// Obtener todos los tags (para admin/testing)
 export const getAllTags = async (req: Request, res: Response) => {
   try {
     const tags = await Tag.find().sort({ createdAt: -1 }); // Más recientes primero

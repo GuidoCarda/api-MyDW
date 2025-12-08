@@ -8,12 +8,9 @@ const router: Router = express.Router();
 
 router.post("/", validator(createUserSchema), controllers.createUser);
 router.post("/google", controllers.createGoogleUser);
-router.post("/login", controllers.loginWithEmailPassword);
 router.get("/", controllers.getAllUsers);
 router.get("/:id", controllers.getUserById);
 router.patch("/:id", validator(updateUserSchema), controllers.updateUser);
 router.delete("/:id", controllers.softDeleteUser);
 
 export default router;
-
-

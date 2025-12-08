@@ -5,8 +5,6 @@ import controllers from "./controllers";
 
 const router: Router = Router();
 
-// public routes
-router.get("/all", controllers.getAllTags); // For testing/admin purposes - must be before :tagId routes
 router.get("/verify/:tagId", controllers.verifyTag);
 
 // route with optional authentication (detects if the user is logged in)
@@ -17,6 +15,7 @@ router.get(
 );
 
 // protected routes (require authentication)
+router.get("/all", authenticateFirebase, controllers.getAllTags);
 router.post("/generate", authenticateFirebase, controllers.generateTagBatch);
 router.post("/activate/:tagId", authenticateFirebase, controllers.activateTag);
 

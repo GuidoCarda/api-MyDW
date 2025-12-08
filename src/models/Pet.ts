@@ -50,7 +50,7 @@ const petSchema = new Schema(
     tagId: {
       type: String,
       unique: true,
-      sparse: true, // allows null but unique if it exists
+      sparse: true,
       index: true,
       required: false,
     },
@@ -60,7 +60,7 @@ const petSchema = new Schema(
     },
     isPublicProfile: {
       type: Boolean,
-      default: false, // the owner decides if the profile is public
+      default: false,
     },
     isLost: {
       type: Boolean,

@@ -28,7 +28,6 @@ const createPet = async (req: Request, res: Response) => {
       });
     }
 
-    // Validar que el usuario esté activo
     if (!userExists.isActive) {
       return res.status(400).json({
         error: "Inactive user",
@@ -52,7 +51,6 @@ const createPet = async (req: Request, res: Response) => {
 
     await pet.save();
 
-    // Agregar la mascota al array de pets del usuario
     await User.findByIdAndUpdate(
       ownerId,
       { $push: { pets: pet._id } },
@@ -68,13 +66,10 @@ const createPet = async (req: Request, res: Response) => {
 
 const getAllPets = async (req: Request, res: Response) => {
   try {
-    // get ownerId from query string if exists
     const { ownerId } = req.query;
 
-    // build the base filter
     const filter: any = { isActive: true };
 
-    // if ownerId is provided, add it to the filter
     if (ownerId) {
       filter.owner = ownerId;
     }
@@ -126,7 +121,6 @@ const updatePet = async (req: Request, res: Response) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Si se intenta cambiar el owner, validar que existe
     if (updateData.ownerId) {
       const userExists = await User.findById(updateData.ownerId);
       if (!userExists) {
@@ -135,7 +129,6 @@ const updatePet = async (req: Request, res: Response) => {
           message: "The specified user ID does not exist",
         });
       }
-      // Mapear ownerId a owner para el modelo
       updateData.owner = updateData.ownerId;
       delete updateData.ownerId;
     }
@@ -172,6 +165,11 @@ const softDeletePet = async (req: Request, res: Response) => {
   }
 };
 
+type PetLostStatus = {
+  isLost: boolean;
+  lostAt?: Date | null;
+};
+
 const toggleLostStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -184,13 +182,11 @@ const toggleLostStatus = async (req: Request, res: Response) => {
       });
     }
 
-    const updateData: any = { isLost };
+    const updateData: PetLostStatus = { isLost };
 
-    // Si se marca como perdida, guardar la fecha
     if (isLost) {
       updateData.lostAt = new Date();
     } else {
-      // Si se desmarca como perdida, limpiar la fecha
       updateData.lostAt = null;
     }
 
