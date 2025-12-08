@@ -4,7 +4,7 @@ import admin from "../../firebase";
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { email, password, name, lastname, phone, address } = req.body;
+    const { email, password, name, lastname, phone, address, isAdmin } = req.body;
     const userRecord = await admin.auth().createUser({
       email,
       password,
@@ -18,6 +18,7 @@ const createUser = async (req: Request, res: Response) => {
       phone,
       address,
       isActive: true,
+      isAdmin: isAdmin || false,
     });
     await user.save();
 
@@ -80,6 +81,7 @@ const createGoogleUser = async (req: Request, res: Response) => {
       _id: uid,
       email,
       isActive: true,
+      isAdmin: false,
     });
     await user.save();
 
@@ -117,13 +119,14 @@ const getUserById = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, lastname, phone, address } = req.body;
+    const { name, lastname, phone, address, isAdmin } = req.body;
 
     const updateData: any = {};
     if (name !== undefined) updateData.name = name;
     if (lastname !== undefined) updateData.lastname = lastname;
     if (phone !== undefined) updateData.phone = phone;
     if (address !== undefined) updateData.address = address;
+    if (isAdmin !== undefined) updateData.isAdmin = isAdmin;
 
     const user = await User.findByIdAndUpdate(id, updateData, { new: true });
 
