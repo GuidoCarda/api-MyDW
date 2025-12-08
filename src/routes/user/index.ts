@@ -1,14 +1,17 @@
 import express, { Router } from "express";
 
 import controllers from "./controllers";
+import validator from "../../middleware/validator";
+import { createUserSchema, updateUserSchema } from "./validations";
 
 const router: Router = express.Router();
 
-router.post("/", controllers.createUser);
+router.post("/", validator(createUserSchema), controllers.createUser);
+router.post("/google", controllers.createGoogleUser);
 router.post("/login", controllers.loginWithEmailPassword);
 router.get("/", controllers.getAllUsers);
 router.get("/:id", controllers.getUserById);
-router.patch("/:id", controllers.updateUser);
+router.patch("/:id", validator(updateUserSchema), controllers.updateUser);
 router.delete("/:id", controllers.softDeleteUser);
 
 export default router;

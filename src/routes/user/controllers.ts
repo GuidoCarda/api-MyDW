@@ -61,6 +61,35 @@ const loginWithEmailPassword = async (req: Request, res: Response) => {
   }
 };
 
+const createGoogleUser = async (req: Request, res: Response) => {
+  try {
+    const { uid, email } = req.body;
+
+    if (!uid || !email) {
+      return res.status(400).json({ error: "UID and email are required" });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findById(uid);
+    if (existingUser) {
+      return res.status(200).json(existingUser);
+    }
+
+    // Create new user in MongoDB
+    const user = new User({
+      _id: uid,
+      email,
+      isActive: true,
+    });
+    await user.save();
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error creating Google user:", error);
+    res.status(500).json({ error: "Failed to create user", details: error });
+  }
+};
+
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
@@ -88,13 +117,15 @@ const getUserById = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { username, email, password } = req.body;
+    const { name, lastname, phone, address } = req.body;
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { username, email, password },
-      { new: true }
-    );
+    const updateData: any = {};
+    if (name !== undefined) updateData.name = name;
+    if (lastname !== undefined) updateData.lastname = lastname;
+    if (phone !== undefined) updateData.phone = phone;
+    if (address !== undefined) updateData.address = address;
+
+    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -102,6 +133,7 @@ const updateUser = async (req: Request, res: Response) => {
 
     res.status(200).json(user);
   } catch (error) {
+    console.error("Error updating user:", error);
     res.status(500).json({ error: "Failed to update user" });
   }
 };
@@ -140,6 +172,7 @@ const softDeleteUser = async (req: Request, res: Response) => {
 
 export default {
   createUser,
+  createGoogleUser,
   loginWithEmailPassword,
   getAllUsers,
   getUserById,

@@ -81,7 +81,7 @@ const getAllPets = async (req: Request, res: Response) => {
 
     const pets = await Pet.find(filter).populate(
       "owner",
-      "name lastname email"
+      "name lastname email phone address"
     );
     res.status(200).json(pets);
   } catch (error) {
@@ -94,7 +94,7 @@ const getPetById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const pet = await Pet.findById(id).populate(
       "owner",
-      "name lastname email phone"
+      "name lastname email phone address"
     );
 
     if (!pet) {
@@ -112,7 +112,7 @@ const getPetsByOwner = async (req: Request, res: Response) => {
     const { ownerId } = req.params;
     const pets = await Pet.find({ owner: ownerId, isActive: true }).populate(
       "owner",
-      "name lastname email"
+      "name lastname email phone address"
     );
 
     res.status(200).json(pets);
@@ -211,7 +211,7 @@ const getLostPets = async (req: Request, res: Response) => {
   try {
     const lostPets = await Pet.find({ isLost: true, isActive: true }).populate(
       "owner",
-      "name lastname email phone"
+      "name lastname email phone address"
     );
     res.status(200).json(lostPets);
   } catch (error) {
