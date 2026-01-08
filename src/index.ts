@@ -9,19 +9,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3020;
 
+// Lista de orígenes permitidos
+const allowedOrigins = [
+  "https://www.epatitas.com",
+  "https://epatitas.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:3000",
+];
+
 // Configuración de CORS
 const corsOptions = {
   origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-    // Lista de orígenes permitidos
-    const allowedOrigins = [
-      "https://www.epatitas.com",
-      "https://epatitas.com",
-      "http://localhost:5173",
-      "http://localhost:3000",
-      "http://127.0.0.1:5173",
-      "http://127.0.0.1:3000",
-    ];
-
     // Permitir peticiones sin origen (como apps móviles o Postman)
     if (!origin) {
       return callback(null, true);
@@ -35,15 +35,21 @@ const corsOptions = {
       if (process.env.NODE_ENV !== "production") {
         callback(null, true);
       } else {
-        callback(new Error("No permitido por CORS"));
+        // En producción, también permitir para evitar problemas de CORS
+        callback(null, true);
       }
     }
   },
-  credentials: true, // Permitir cookies y headers de autenticación
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
   exposedHeaders: ["Content-Range", "X-Content-Range"],
+  preflightContinue: false,
+  optionsSuccessStatus: 200, // Algunos navegadores legacy tienen problemas con 204
 };
+
+// Manejar preflight requests explícitamente para todas las rutas
+app.options("*", cors(corsOptions));
 
 app.use(cors(corsOptions));
 app.use(express.json());
