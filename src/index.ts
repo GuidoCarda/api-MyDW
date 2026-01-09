@@ -48,9 +48,6 @@ const corsOptions = {
   optionsSuccessStatus: 200, // Algunos navegadores legacy tienen problemas con 204
 };
 
-// Manejar preflight requests explícitamente para todas las rutas
-app.options("*", cors(corsOptions));
-
 app.use(cors(corsOptions));
 app.use(express.json());
 
