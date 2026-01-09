@@ -70,6 +70,10 @@ const petSchema = new Schema(
       type: Date,
       required: false,
     },
+    lostLocation: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

@@ -168,12 +168,13 @@ const softDeletePet = async (req: Request, res: Response) => {
 type PetLostStatus = {
   isLost: boolean;
   lostAt?: Date | null;
+  lostLocation?: string | null;
 };
 
 const toggleLostStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { isLost } = req.body;
+    const { isLost, lostLocation } = req.body;
 
     if (typeof isLost !== "boolean") {
       return res.status(400).json({
@@ -186,8 +187,10 @@ const toggleLostStatus = async (req: Request, res: Response) => {
 
     if (isLost) {
       updateData.lostAt = new Date();
+      updateData.lostLocation = lostLocation || null;
     } else {
       updateData.lostAt = null;
+      updateData.lostLocation = null;
     }
 
     const pet = await Pet.findByIdAndUpdate(id, updateData, { new: true });
